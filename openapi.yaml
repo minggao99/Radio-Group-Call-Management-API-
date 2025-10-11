@@ -1,0 +1,190 @@
+openapi: 3.0.3
+info:
+  title: FloorControl API
+  version: 1.1.0
+  description: |
+    A lightweight Elixir + OTP REST API for managing radio floor control sessions.
+    Includes floor timeout, holder listing, and audit history features.
+
+servers:
+  - url: http://localhost:8080
+    description: Local Development Server
+
+paths:
+  /:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: API running successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "FloorControl API is running"
+
+  /groups/{group_id}/floor:
+    get:
+      summary: Retrieve the current floor holder
+      description: Returns the current user holding the floor, or null if free.
+      parameters:
+        - name: group_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Current holder retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  holder:
+                    type: string
+                    nullable: true
+                    example: "userA"
+        '404':
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "group_not_found"
+
+    post:
+      summary: Request floor ownership
+      description: Request to occupy the floor in a specific group.
+      parameters:
+        - name: group_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  example: "userA"
+                priority:
+                  type: integer
+                  enum: [1, 2, 3, 4]
+                  description: User priority level (1 = highest, 4 = lowest)
+                  example: 3
+      responses:
+        '200':
+          description: Floor granted or already held
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [granted, already_holding]
+                  holder:
+                    type: string
+                    example: "userA"
+        '409':
+          description: Conflict — floor held by another user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "conflict"
+                  holder:
+                    type: string
+                    example: "userB"
+
+  /groups/{group_id}/floor/{user_id}:
+    delete:
+      summary: Release the floor
+      description: Release the floor manually by the holder.
+      parameters:
+        - name: group_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Floor released
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "released"
+        '403':
+          description: Forbidden — not the holder
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "forbidden"
+        '404':
+          description: Not found — no holder or group missing
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "group_not_found"
+
+  /audit:
+    get:
+      summary: Retrieve historical audit logs
+      description: Returns a list of all floor-related events (granted, released, preempted, timeout).
+      responses:
+        '200':
+          description: List of audit records
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  audit_log:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        group:
+                          type: string
+                          example: "alpha"
+                        user:
+                          type: string
+                          example: "u1"
+                        action:
+                          type: string
+                          enum: [granted, released, preempted, timeout_released]
+                        priority:
+                          type: integer
+                          example: 3
+                        timestamp:
+                          type: string
+                          format: date-time
+                          example: "2025-10-08T21:48:11Z"
