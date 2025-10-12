@@ -2,7 +2,7 @@
 
 # Motorola Software Engineer Interview Challenge: Radio Group Call Management API 
 
-## 📑 Table of Contents
+## Table of Contents
 - [Feature Overview](#feature-overview)
   - [Basic Functionality](#basic-functionality)
   - [Bonus Challenges 1–6](#bonus-challenges-1–6)
@@ -20,7 +20,7 @@
 · Each group runs as its own GenServer process, ensuring that only one user can hold the floor at a time.
 · The API supports requesting, releasing, and querying floor ownership via REST endpoints.
 
-### Bonus CHallenges 1-6
+### Bonus Challenges 1-6
 · Adds automatic floor release after 10 seconds of inactivity.
 · Adds 4 priority levels (P1–P4), allowing higher-priority users to preempt lower-priority holders.
 · Adds endpoint to query who currently holds the floor and return both the user ID and priority level.
