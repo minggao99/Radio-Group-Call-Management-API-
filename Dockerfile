@@ -8,11 +8,12 @@ WORKDIR /app
 
 COPY mix.exs mix.lock ./
 # COPY config ./config
-RUN mix deps.get
+RUN MIX_ENV=prod mix deps.get
 
 COPY lib ./lib
 
-RUN mix compile
+RUN MIX_ENV=prod mix compile
+
 
 # Run
 FROM elixir:1.15-slim

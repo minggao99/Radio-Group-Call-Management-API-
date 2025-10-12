@@ -14,7 +14,7 @@ defmodule FloorControl.Application do
       {Registry, keys: :unique, name: FloorControl.Registry},
       {DynamicSupervisor, strategy: :one_for_one, name: FloorControl.GroupSupervisor},
       FloorControl.AuditServer,
-      {Plug.Cowboy, scheme: :http, plug: FloorControl.Router, options: [port: 8080]}
+      {Plug.Cowboy, scheme: :http, plug: FloorControl.Router, options: [port: 8080, ip: {0, 0, 0, 0}]}
     ]
 
     opts = [strategy: :one_for_one, name: FloorControl.Supervisor]

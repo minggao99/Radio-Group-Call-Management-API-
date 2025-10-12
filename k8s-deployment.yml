@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: floor-control-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: floor-control
+  template:
+    metadata:
+      labels:
+        app: floor-control
+    spec:
+      containers:
+        - name: floor-control
+          image: floor_control_app:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
