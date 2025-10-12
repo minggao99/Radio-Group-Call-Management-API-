@@ -50,7 +50,6 @@ curl http://localhost:8080/groups/test/floor
 
 curl http://localhost:8080/audit
 
-# Displays all logged events
 ```
 
 ### (2) Run on Local Kubernetes Cluster (Bonus Challenge 6)
@@ -81,10 +80,11 @@ mix test
 
 ### Otherwise
 Every commit triggers:
+```bash
   mix deps.get
   mix compile --warnings-as-errors
   mix test 
-
+```
 
 ## Author
 Ming Gao
