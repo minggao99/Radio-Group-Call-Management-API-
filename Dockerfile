@@ -7,7 +7,7 @@ RUN mix local.hex --force && mix local.rebar --force
 WORKDIR /app
 
 COPY mix.exs mix.lock ./
-COPY config ./config
+# COPY config ./config
 RUN mix deps.get
 
 COPY lib ./lib
