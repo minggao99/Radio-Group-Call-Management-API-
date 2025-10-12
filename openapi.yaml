@@ -3,8 +3,7 @@ info:
   title: FloorControl API
   version: 1.1.0
   description: |
-    A lightweight Elixir + OTP REST API for managing radio floor control sessions.
-    Includes floor timeout, holder listing, and audit history features.
+    An Elixir + OTP–based REST API that handles radio floor control, featuring automatic timeout release, floor holder queries, and an audit log for all events.
 
 servers:
   - url: http://localhost:8080
@@ -13,7 +12,7 @@ servers:
 paths:
   /:
     get:
-      summary: Health check
+      summary: Health status check
       responses:
         '200':
           description: API running successfully

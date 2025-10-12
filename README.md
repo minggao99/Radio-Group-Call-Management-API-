@@ -81,9 +81,9 @@ mix test
 ### Otherwise
 Every commit triggers:
 ```bash
-  mix deps.get
-  mix compile --warnings-as-errors
-  mix test 
+mix deps.get
+mix compile --warnings-as-errors
+mix test 
 ```
 
 ## Author
