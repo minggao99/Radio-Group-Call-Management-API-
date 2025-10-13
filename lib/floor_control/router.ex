@@ -8,12 +8,10 @@ defmodule FloorControl.Router do
   plug Plug.Parsers, parsers: [:json], pass: ["application/json"], json_decoder: Jason
   plug :dispatch
 
-  # Status check
   get "/" do
     send_resp(conn, 200, "FloorControl API is running ")
   end
 
-  # Inquiry current holder
   get "/groups/:group_id/floor" do
     case FloorManager.get_holder(group_id) do
       {:ok, 200, result} ->
@@ -24,14 +22,13 @@ defmodule FloorControl.Router do
     end
   end
 
-  # Obtain floor
   post "/groups/:group_id/floor" do
     case conn.body_params do
       %{"userId" => user_id, "priority" => prio_str} ->
         priority =
           case Integer.parse(prio_str) do
             {num, _} -> num
-            :error -> 3  # 默认 P3
+            :error -> 3
           end
 
         case FloorManager.obtain_floor(group_id, user_id, priority) do
@@ -44,7 +41,6 @@ defmodule FloorControl.Router do
     end
   end
 
-  # Release floor
   delete "/groups/:group_id/floor/:user_id" do
     case FloorManager.release_floor(group_id, user_id) do
       {:ok, status, result} ->
@@ -61,7 +57,6 @@ defmodule FloorControl.Router do
     json(conn, 200, %{"audit_log" => logs})
   end
 
-  # 404 Not Found
   match _ do
     send_resp(conn, 404, "Not found")
   end
