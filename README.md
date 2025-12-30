@@ -1,6 +1,6 @@
 ## README.md
 
-# Motorola Software Engineer Interview Challenge: Radio Group Call Management API 
+# Radio Group Call Management API 
 
 ## Table of Contents
 - [Feature Overview](#feature-overview)
